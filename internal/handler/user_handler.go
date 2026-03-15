@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -13,20 +14,24 @@ type Handler struct {
 	s *service.Service
 }
 
-func NewService(s *service.Service) *Handler {
+func NewHandler(s *service.Service) *Handler {
 	return &Handler{s: s}
 }
 
 func (h *Handler) CreateUser(c *gin.Context) {
 	var req model.CreateUserRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"erro": err})
+		c.JSON(http.StatusBadRequest, gin.H{"erro": "1"})
 		return
 	}
 
 	user, err := h.s.CreateUser(req)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"erro": err})
+		fmt.Println("ERRO AO CRIAR USUARIO:", err)
+
+		c.JSON(http.StatusBadRequest, gin.H{
+			"erro": err.Error(),
+		})
 		return
 	}
 

@@ -18,11 +18,11 @@ func NewRepostory(db *sql.DB) *Repository {
 func (r *Repository) CreateUser(req model.CreateUserRequest, hashedPassword string) (*model.User, error) {
 	query := `INSERT INTO users (name, email, password)
 		VALUES ($1, $2, $3)
-		RETURNING users (name, email, created_at)`
+		RETURNING id, name, email, created_at`
 
 	user := &model.User{}
 	err := r.db.QueryRow(query, req.Name, req.Email, hashedPassword).
-		Scan(&user.Name, &user.Email, &user.CreatedAt)
+		Scan(&user.ID, &user.Name, &user.Email, &user.CreatedAt)
 
 	if err != nil {
 		return nil, fmt.Errorf("Erro ao cadastrar o usuario no banco: %w", err)
@@ -58,7 +58,7 @@ func (r *Repository) FindAllUsers() ([]model.User, error) {
 }
 
 func (r *Repository) FindByIdUser(id int) (*model.User, error) {
-	query := `SELECT id, nome, email, created_at
+	query := `SELECT id, name, email, created_at
 		FROM users
 		WHERE id = $1`
 
@@ -72,7 +72,6 @@ func (r *Repository) FindByIdUser(id int) (*model.User, error) {
 
 	if err != nil {
 		return nil, fmt.Errorf("Error ao filtrar o usuario pelo ID fornecido: %w", err)
-
 	}
 
 	return user, nil
@@ -82,7 +81,7 @@ func (r *Repository) UpdateUser(id int, req model.UpdateUserRequest) (*model.Use
 	query := `UPDATE users
 		SET email = $1, password = $2
 		WHERE id = $3
-		REETUNING id, name, email`
+		RETURNING id, name, email`
 
 	user := &model.User{}
 

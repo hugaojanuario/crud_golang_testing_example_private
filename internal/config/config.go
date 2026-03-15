@@ -12,7 +12,9 @@ type Config struct {
 	DBPort     string
 	DbUser     string
 	DbPassword string
+	DbName     string
 	SslMode    string
+	Port       string
 }
 
 func NewConfig() *Config {
@@ -26,6 +28,8 @@ func NewConfig() *Config {
 		DBPort:     os.Getenv("DB_PORT"),
 		DbUser:     os.Getenv("DB_USER"),
 		DbPassword: os.Getenv("DB_PASSWORD"),
+		DbName:     os.Getenv("DB_NAME"),
 		SslMode:    os.Getenv("DB_SSLMODE"),
+		Port:       os.Getenv("API_PORT"),
 	}
 }

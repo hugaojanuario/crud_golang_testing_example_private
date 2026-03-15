@@ -2,7 +2,7 @@ package handler
 
 import "github.com/gin-gonic/gin"
 
-func NewConnection(r gin.Engine, handler *Handler) {
+func NewConnection(r *gin.Engine, handler *Handler) {
 	users := r.Group("/api")
 
 	users.POST("/user", handler.CreateUser)
